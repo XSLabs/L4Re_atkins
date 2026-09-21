@@ -14,6 +14,7 @@
 
 #include <l4/sys/factory>
 #include <l4/sys/ipc_gate>
+#include <l4/sys/pi_mutex>
 #include <l4/sys/task>
 
 #include <l4/re/env>
@@ -203,6 +204,17 @@ create_kobj(L4::Cap<L4::Ipc_gate> cap, char const *err_msg = "")
 {
   L4Re::chksys(
     L4Re::Env::env()->factory()->create_gate(cap, L4::Cap_base::Invalid, 0),
+    err_msg);
+}
+
+/// Create a PI Mutex with a previously allocated capability.
+inline void
+create_kobj(L4::Cap<L4::Pi_mutex> cap, l4_addr_t ku_status,
+            L4::Cap<L4::Task> const &task_cap,
+            char const *err_msg = "")
+{
+  L4Re::chksys(
+    L4Re::Env::env()->factory()->create_pi_mutex(cap, ku_status, task_cap),
     err_msg);
 }
 
